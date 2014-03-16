@@ -1,4 +1,4 @@
 fileECoyote
 ===========
 
-NodeJS package for easy public/private file storage and retrieval.
+NodeJS service/package for easy public/private file storage and retrieval.
