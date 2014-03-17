@@ -1,0 +1,1 @@
+nodemon --harmony app.js
