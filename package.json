@@ -42,6 +42,7 @@
     "co-busboy": "x.x",
     "ncp": "x.x",
     "koa-send": "x.x",
+    "formidable": "x.x",
     "bluebird": "x.x"
   },
   "engines": {
