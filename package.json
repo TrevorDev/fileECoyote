@@ -43,7 +43,8 @@
     "ncp": "x.x",
     "koa-send": "x.x",
     "formidable": "x.x",
-    "bluebird": "x.x"
+    "bluebird": "x.x",
+    "supertest": "x.x"
   },
   "engines": {
     "node": ">=0.11.12"
