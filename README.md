@@ -13,14 +13,16 @@ fileECoyote
 
 ## Create fileECoyote server
 
-```var path = require('path');
+```
+var path = require('path');
 var coyote = require('file-e-coyote');
 var app = exports.app = coyote.startServer({
 	adaptor: new coyote.fileAdaptor(),
 	authKeys: ["app1SecretKey","app2SecretKey"],
 	downloadFolder: path.join(process.cwd(), "uploads"),
 	port: 3008
-});```
+});
+```
 
 ## Upload file from browser
 
