@@ -1,5 +1,5 @@
 var path = require('path');
-var coyote = require('./lib/fileECoyote');
+var coyote = require('fileECoyote');
 
 var app = exports.app = coyote.startServer({
 										adaptor: new coyote.fileAdaptor(),

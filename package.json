@@ -16,6 +16,7 @@
   ],
   "files": [
     "lib",
+    "test",
     "examples",
     "README.md"
   ],
@@ -25,29 +26,19 @@
     "url": "http://github.com/TrevorDev/fileECoyote.git"
   },
   "dependencies":
-  { "mysql": "x.x",
-    "sequelize": "x.x",
-    "co-views": "x.x",
-    "co-body": "x.x",
-    "koa": "x.x",
-    "koa-logger": "x.x",
-    "koa-route": "x.x",
-    "koa-router": "x.x",
-    "koa-static": "x.x",
-    "koa-session": "x.x",
-    "swig": "x.x",
-    "bcryptjs": "x.x",
+  { 
     "save-to": "x.x",
     "co-fs": "x.x",
     "co-busboy": "x.x",
-    "ncp": "x.x",
     "koa-send": "x.x",
-    "formidable": "x.x",
-    "bluebird": "x.x",
+    "koa-static": "x.x",
+    "koa-router": "x.x",
+    "co-body": "x.x",
+    "koa": "x.x",
     "supertest": "x.x"
   },
   "engines": {
-    "node": ">=0.11.12"
+    "node": ">=0.11.9"
   },
   "readmeFilename": "README.md"
 }

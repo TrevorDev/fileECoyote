@@ -1,9 +1,18 @@
 var assert = require("assert")
 var fs = require("fs")
 var request = require('supertest')
-var Promise = require("bluebird");
+var path = require('path');
+var coyote = require('../lib/fileECoyote');
 
-var app = require('../app').app.callback();
+var uploadsDir = path.join(process.cwd(), "/test/uploads");
+
+var server = coyote.startServer({
+                    adaptor: new coyote.fileAdaptor(),
+                    authKeys: ["app1SecretKey","app2SecretKey"],
+                    downloadFolder: uploadsDir,
+                    port: 3008
+                  });
+var app = server.callback();
 
 describe('GET /ping', function(){
   it('respond with json', function(done){
@@ -15,13 +24,13 @@ describe('GET /ping', function(){
 })
 
 describe('POST /upload', function(){
-	afterEach(Promise.coroutine(function*(){
-		fs.readdir(process.cwd()+'/uploads', function(err, files){
+	afterEach(function*(){
+		fs.readdir(uploadsDir, function(err, files){
 			for (i in files) {
-				fs.unlink(process.cwd()+'/uploads/'+files[i])
+				fs.unlink(uploadsDir+"/"+files[i])
 			}
 		});
-	}))
+	})
 
   it('respond with json', function(done){
     request(app)
@@ -33,13 +42,13 @@ describe('POST /upload', function(){
 })
 
 describe('End To End', function(){
-	after(Promise.coroutine(function*(){
-		fs.readdir(process.cwd()+'/uploads', function(err, files){
+	after(function*(){
+		fs.readdir(uploadsDir, function(err, files){
 			for (i in files) {
-				fs.unlink(process.cwd()+'/uploads/'+files[i])
+				fs.unlink(uploadsDir+"/"+files[i])
 			}
 		});
-	}))
+	})
 	var fileID;
 	var key;
 
