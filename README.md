@@ -26,6 +26,15 @@ var app = exports.app = coyote.startServer({
 
 ## Upload file from browser
 
+```
+ <form action="/upload" enctype="multipart/form-data" method="post">
+   What files are you sending? <input type="file" name="files" multiple>
+   <input type="submit" value="Send">
+ </form>
+
+ <a href="/download/0">download</a>
+```
+
 ## Contributors
 
 - [Trevor Baron](https://github.com/TrevorDev) (author)
