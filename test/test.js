@@ -7,6 +7,12 @@ var coyote = require('../lib/fileECoyote');
 var uploadsDir = path.join(process.cwd(), "/test/uploads");
 
 var server = coyote.startServer({
+                    database: {
+                      host: "localhost",
+                      user: "root",
+                      database: "coyote",
+                      password: ""
+                    },
                     adaptor: new coyote.fileAdaptor(),
                     authKeys: ["app1SecretKey","app2SecretKey"],
                     downloadFolder: uploadsDir,

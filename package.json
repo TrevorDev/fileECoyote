@@ -27,15 +27,17 @@
   },
   "dependencies":
   { 
-    "save-to": "x.x",
-    "co-fs": "x.x",
-    "co-busboy": "x.x",
-    "koa-send": "x.x",
-    "koa-static": "x.x",
-    "koa-router": "x.x",
-    "co-body": "x.x",
-    "koa": "x.x",
-    "supertest": "x.x"
+      "mysql": "x.x"
+    , "sequelize": "x.x"
+    , "save-to": "x.x"
+    , "co-fs": "x.x"
+    , "co-busboy": "x.x"
+    , "koa-send": "x.x"
+    , "koa-static": "x.x"
+    , "koa-router": "x.x"
+    , "co-body": "x.x"
+    , "koa": "x.x"
+    , "supertest": "x.x"
   },
   "engines": {
     "node": ">=0.11.9"
