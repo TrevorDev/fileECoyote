@@ -13,9 +13,10 @@ var server = coyote.startServer({
                       database: "coyote",
                       password: ""
                     },
-                    adaptor: new coyote.fileAdaptor(),
+                    adaptor: new coyote.fileAdaptor({
+                      downloadFolder: uploadsDir
+                    }),
                     authKeys: ["app1SecretKey","app2SecretKey"],
-                    downloadFolder: uploadsDir,
                     port: 3008
                   });
 var app = server.callback();
@@ -48,7 +49,7 @@ describe('POST /upload', function(){
 })
 
 describe('End To End', function(){
-	after(function*(){
+	after(function(){
 		fs.readdir(uploadsDir, function(err, files){
 			for (i in files) {
 				fs.unlink(uploadsDir+"/"+files[i])
