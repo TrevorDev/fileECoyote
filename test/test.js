@@ -16,7 +16,7 @@ var server = coyote.startServer({
                     adaptor: new coyote.fileAdaptor({
                       downloadFolder: uploadsDir
                     }),
-                    authKeys: ["app1SecretKey","app2SecretKey"],
+                    masterSecret: 'secret',
                     port: 3008
                   });
 var app = server.callback();
@@ -25,6 +25,15 @@ describe('GET /ping', function(){
   it('respond with json', function(done){
     request(app)
       .get('/ping')
+      .expect('Content-Type', /json/)
+      .expect(200, done);
+  })
+})
+
+describe('GET /createAccount', function(){
+  it('respond with json', function(done){
+    request(app)
+      .get('/createAccount?masterSecret=secret&name=test&token=app1secret')
       .expect('Content-Type', /json/)
       .expect(200, done);
   })
@@ -65,7 +74,7 @@ describe('End To End', function(){
       .attach('image', process.cwd()+'/test/files/nifty.png')
       .expect('Content-Type', /json/)
       .expect(200).end(function(err, res){
-        fileID = JSON.parse(res.text).data.fileID
+        fileID = JSON.parse(res.text).data.files[0].id
         done(err)
       });
   })
@@ -81,7 +90,7 @@ describe('End To End', function(){
 
   it('creates access token', function(done){
     request(app)
-      .get('/requestToken/'+fileID+'?appKey=app1SecretKey&requestID=testUser&expireIn=1000')
+      .get('/requestToken/'+fileID+'?name=test&token=app1secret&requestID=testUser&expireIn=1000')
       .expect('Content-Type', /json/)
       .expect(200).end(function(err, res){
         key = JSON.parse(res.text).data.requestToken

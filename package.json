@@ -30,6 +30,7 @@
       "mysql": "x.x"
     , "sequelize": "x.x"
     , "save-to": "x.x"
+    , "co": "x.x"
     , "co-fs": "x.x"
     , "co-busboy": "x.x"
     , "koa-send": "x.x"
