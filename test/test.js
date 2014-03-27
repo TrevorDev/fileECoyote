@@ -1,10 +1,10 @@
 var assert = require("assert")
 var fs = require("fs")
 var request = require('supertest')
-var path = require('path');
-var coyote = require('../lib/fileECoyote');
+var path = require('path')
+var coyote = require('../lib/fileECoyote')
 
-var uploadsDir = path.join(process.cwd(), "/test/uploads");
+var uploadsDir = path.join(process.cwd(), "/test/uploads")
 
 var server = coyote.startServer({
                     database: {
@@ -18,15 +18,15 @@ var server = coyote.startServer({
                     }),
                     masterSecret: 'secret',
                     port: 3008
-                  });
-var app = server.callback();
+                  })
+var app = server.callback()
 
 describe('GET /ping', function(){
   it('respond with json', function(done){
     request(app)
       .get('/ping')
       .expect('Content-Type', /json/)
-      .expect(200, done);
+      .expect(200, done)
   })
 })
 
@@ -35,7 +35,7 @@ describe('GET /createAccount', function(){
     request(app)
       .get('/createAccount?masterSecret=secret&name=test&token=app1secret')
       .expect('Content-Type', /json/)
-      .expect(200, done);
+      .expect(200, done)
   })
 })
 
@@ -45,15 +45,15 @@ describe('POST /upload', function(){
 			for (i in files) {
 				fs.unlink(uploadsDir+"/"+files[i])
 			}
-		});
+		})
 	})
 
   it('respond with json', function(done){
     request(app)
-      .post('/upload')
+      .post('/upload?account=test')
       .attach('image', process.cwd()+'/test/files/nifty.png')
       .expect('Content-Type', /json/)
-      .expect(200, done);
+      .expect(200, done)
   })
 })
 
@@ -63,20 +63,20 @@ describe('End To End', function(){
 			for (i in files) {
 				fs.unlink(uploadsDir+"/"+files[i])
 			}
-		});
+		})
 	})
-	var fileID;
-	var key;
+	var fileID
+	var key
 
   it('responds with json', function(done){
     request(app)
-      .post('/upload')
+      .post('/upload?account=test')
       .attach('image', process.cwd()+'/test/files/nifty.png')
       .expect('Content-Type', /json/)
       .expect(200).end(function(err, res){
         fileID = JSON.parse(res.text).data.files[0].id
         done(err)
-      });
+      })
   })
 
   it('cannot download unauth request', function(done){
@@ -85,7 +85,7 @@ describe('End To End', function(){
       .expect('Content-Type', /json/)
       .expect(400).end(function(err, res){
         done(err)
-      });
+      })
   })
 
   it('creates access token', function(done){
@@ -95,21 +95,21 @@ describe('End To End', function(){
       .expect(200).end(function(err, res){
         key = JSON.parse(res.text).data.requestToken
         done(err)
-      });
+      })
   })
 
   it('downloads file when authenticated', function(done){
   	request(app)
       .get('/download/'+fileID+"?requestToken="+key)
       .expect('Content-Type', /application.octet-stream/)
-      .expect(200, done);
+      .expect(200, done)
   })
 
   it('respond with error after token expires', function(done){
   	setTimeout(function(){
   		request(app)
       .get('/download/'+fileID+"?requestToken="+key)
-      .expect(400, done);
+      .expect(400, done)
   	}, 1000)
   })
 })
