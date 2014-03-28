@@ -39,6 +39,7 @@
     , "co-body": "x.x"
     , "koa": "x.x"
     , "supertest": "x.x"
+    , "koa-cors": "x.x"
   },
   "engines": {
     "node": ">=0.11.9"
