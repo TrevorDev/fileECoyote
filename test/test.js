@@ -74,6 +74,7 @@ describe('End To End', function(){
 		})
 	})
 	var fileID
+  var PublicFileID
 	var key
 
   it('responds with json', function(done){
@@ -83,6 +84,26 @@ describe('End To End', function(){
       .expect('Content-Type', /json/)
       .expect(200).end(function(err, res){
         fileID = JSON.parse(res.text).data.files[0].id
+        done(err)
+      })
+  })
+
+  it('responds with json', function(done){
+    request(app)
+      .post('/file/upload?account=test&public=true')
+      .attach('image', process.cwd()+'/test/files/nifty.png')
+      .expect('Content-Type', /json/)
+      .expect(200).end(function(err, res){
+        PublicFileID = JSON.parse(res.text).data.files[0].id
+        done(err)
+      })
+  })
+
+  it('can download unauth request with public file', function(done){
+    request(app)
+      .get('/file/'+PublicFileID)
+      .expect('Content-Type', /application.octet-stream/)
+      .expect(200).end(function(err, res){
         done(err)
       })
   })
@@ -113,6 +134,14 @@ describe('End To End', function(){
       .expect(200, done)
   })
 
+  it('respond with error after token expires', function(done){
+    setTimeout(function(){
+      request(app)
+      .get('/file/'+fileID+"?requestToken="+key)
+      .expect(400, done)
+    }, 1000)
+  })
+
   it('deletes', function(done){
     request(app)
       .del('/file/'+fileID+"?account=test&token=app1secret")
@@ -123,13 +152,5 @@ describe('End To End', function(){
     request(app)
       .get('/file/'+fileID+"?requestToken="+key)
       .expect(404, done)
-  })
-
-  it('respond with error after token expires', function(done){
-  	setTimeout(function(){
-  		request(app)
-      .get('/file/'+fileID+"?requestToken="+key)
-      .expect(400, done)
-  	}, 1000)
   })
 })
