@@ -14,7 +14,8 @@ var server = coyote.startServer({
                       password: ""
                     },
                     adaptor: new coyote.fileAdaptor({
-                      downloadFolder: uploadsDir
+                      downloadFolder: uploadsDir,
+                      maxBytes: 1000
                     }),
                     masterSecret: 'secret',
                     port: 3008
@@ -30,10 +31,10 @@ describe('GET /ping', function(){
   })
 })
 
-describe('GET /createAccount', function(){
+describe('POST /account/create', function(){
   it('respond with json', function(done){
     request(app)
-      .get('/createAccount?masterSecret=secret&name=test&token=app1secret')
+      .post('/account/create?masterSecret=secret&name=test&token=app1secret')
       .expect('Content-Type', /json/)
       .expect(200, done)
   })
@@ -54,6 +55,13 @@ describe('POST /upload', function(){
       .attach('image', process.cwd()+'/test/files/nifty.png')
       .expect('Content-Type', /json/)
       .expect(200, done)
+  })
+
+  it('respond with json', function(done){
+    request(app)
+      .post('/upload?account=test')
+      .attach('image', process.cwd()+'/test/files/tooBig.jpg')
+      .expect(413, done)
   })
 })
 
@@ -81,7 +89,7 @@ describe('End To End', function(){
 
   it('cannot download unauth request', function(done){
   	request(app)
-      .get('/download/'+fileID)
+      .get('/file/'+fileID)
       .expect('Content-Type', /json/)
       .expect(400).end(function(err, res){
         done(err)
@@ -90,7 +98,7 @@ describe('End To End', function(){
 
   it('creates access token', function(done){
     request(app)
-      .get('/requestToken/'+fileID+'?name=test&token=app1secret&requestID=testUser&expireIn=1000')
+      .post('/file/'+fileID+'/requestToken?name=test&token=app1secret&requestID=testUser&expireIn=1000')
       .expect('Content-Type', /json/)
       .expect(200).end(function(err, res){
         key = JSON.parse(res.text).data.requestToken
@@ -100,7 +108,7 @@ describe('End To End', function(){
 
   it('downloads file when authenticated', function(done){
   	request(app)
-      .get('/download/'+fileID+"?requestToken="+key)
+      .get('/file/'+fileID+"?requestToken="+key)
       .expect('Content-Type', /application.octet-stream/)
       .expect(200, done)
   })
@@ -108,7 +116,7 @@ describe('End To End', function(){
   it('respond with error after token expires', function(done){
   	setTimeout(function(){
   		request(app)
-      .get('/download/'+fileID+"?requestToken="+key)
+      .get('/file/'+fileID+"?requestToken="+key)
       .expect(400, done)
   	}, 1000)
   })
