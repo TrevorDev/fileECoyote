@@ -98,7 +98,7 @@ describe('End To End', function(){
 
   it('creates access token', function(done){
     request(app)
-      .post('/file/'+fileID+'/requestToken?name=test&token=app1secret&requestID=testUser&expireIn=1000')
+      .post('/file/'+fileID+'/requestToken?account=test&token=app1secret&requestID=testUser&expireIn=1000')
       .expect('Content-Type', /json/)
       .expect(200).end(function(err, res){
         key = JSON.parse(res.text).data.requestToken
@@ -111,6 +111,18 @@ describe('End To End', function(){
       .get('/file/'+fileID+"?requestToken="+key)
       .expect('Content-Type', /application.octet-stream/)
       .expect(200, done)
+  })
+
+  it('deletes', function(done){
+    request(app)
+      .del('/file/'+fileID+"?account=test&token=app1secret")
+      .expect(200, done)
+  })
+
+  it('404 after file deleted', function(done){
+    request(app)
+      .get('/file/'+fileID+"?requestToken="+key)
+      .expect(404, done)
   })
 
   it('respond with error after token expires', function(done){
