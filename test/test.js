@@ -40,7 +40,7 @@ describe('POST /account/create', function(){
   })
 })
 
-describe('POST /upload', function(){
+describe('POST /file/upload', function(){
 	afterEach(function*(){
 		fs.readdir(uploadsDir, function(err, files){
 			for (i in files) {
@@ -51,7 +51,7 @@ describe('POST /upload', function(){
 
   it('respond with json', function(done){
     request(app)
-      .post('/upload?account=test')
+      .post('/file/upload?account=test')
       .attach('image', process.cwd()+'/test/files/nifty.png')
       .expect('Content-Type', /json/)
       .expect(200, done)
@@ -59,7 +59,7 @@ describe('POST /upload', function(){
 
   it('respond with json', function(done){
     request(app)
-      .post('/upload?account=test')
+      .post('/file/upload?account=test')
       .attach('image', process.cwd()+'/test/files/tooBig.jpg')
       .expect(413, done)
   })
@@ -78,7 +78,7 @@ describe('End To End', function(){
 
   it('responds with json', function(done){
     request(app)
-      .post('/upload?account=test')
+      .post('/file/upload?account=test')
       .attach('image', process.cwd()+'/test/files/nifty.png')
       .expect('Content-Type', /json/)
       .expect(200).end(function(err, res){
