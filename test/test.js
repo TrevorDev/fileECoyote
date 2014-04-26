@@ -129,8 +129,9 @@ describe('End To End', function(){
 
   it('downloads file when authenticated', function(done){
   	request(app)
-      .get('/file/'+fileID+"?requestToken="+key)
+      .get('/file/'+fileID+"?requestToken="+key+'&cache=false&download=true')
       .expect('Content-Type', /application.octet-stream/)
+      .expect('Cache-Control', 'max-age=0')
       .expect(200, done)
   })
 
